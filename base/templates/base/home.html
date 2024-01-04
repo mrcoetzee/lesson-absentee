@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+ 
+
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+
+
+    <!--Display the buttons to navigate to the different pages-->
+<!------------------------------------------------------------------------------------------------------>
+    <div class="container p-5 my-5 bg-secondary text-white">
+        <div class="row">
+            <!--Manage Absentees Button-->
+            <div class="container col">
+                <label for="btnAbsentees" class="form-label">Submit, delete and manage daily absentees.</label>
+                <br/>
+                <button type="submit" class="btn btn-primary" name="btnAbsentees", value="Absentees">Manage Absentees</button>
+            </div>
+            <!------------------------------------------------------------------------------------------>
+            <!--Manage Classes Button-->
+            <div class="container col">
+                <label for="btnAbsentees" class="form-label">Add and delete classes that you teach.</label>
+                <br/>
+                <button type="submit" class="btn btn-warning" value="Classes", name="btnClasses">Manage Classes</button>
+            </div>
+            <!------------------------------------------------------------------------------------------>
+            <!--Statistics Button-->
+            <div class="container col">
+                <label for="btnAbsentees" class="form-label">View absentee statistics</label>
+                <br/>
+                <button type="submit" class="btn btn-dark" value="Stats", name="btnStats">Absentee Statistics</button>
+            </div>
+        </div>
+    </div>
+<!------------------------------------------------------------------------------------------------------>
+
+<!--Display a list of classes for the logged in teacher-->
+<!------------------------------------------------------------------------------------------------------>
+    <div class="container p-5 my-5 border  bg-dark text-white">
+        <h4>Your classes:</h4>
+        {% for class in classes %}
+            
+            <div class="list-group">
+                <li class="list-group-item list-group-item-action selector" id="{{class.id}}"
+                onclick="myFunction('{{class.id}}')">
+    
+                <div class="row">
+                    <div class="col-md-2" >{{class.subject}} {{class.grade}}</div>
+                    <div class="col-md-4">{{class.description}}</div>
+                </div>
+                
+                </li>
+            </div>
+        {% endfor %}
+        <input type = "hidden" name = "classid" id="classid" value = "">
+    </div>
+
+</form>
+
+{% endblock %}

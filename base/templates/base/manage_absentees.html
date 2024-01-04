@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+ 
+
+
+{% block content %}
+<!------------------------------------------------------------------------------------------------------>
+<form action="" method="POST">
+    {% csrf_token %}
+
+    <!-------------------------------------------------------------------------------------------------->
+    <!--List of learners-->
+    <div class="container p-5 my-5 border  bg-dark text-white">
+        <h4>Your classes:</h4>
+        {% for class in classes %}
+            
+            <div class="list-group">
+                <li class="list-group-item list-group-item-action selector" id="{{class.id}}"
+                onclick="myFunction('{{class.id}}')">
+      
+                <div class="row">
+                    <div class="col-md-2" >{{class.subject}} {{class.grade}}</div>
+                    <div class="col-md-4">{{class.description}}</div>
+                </div>
+                
+                </li>
+            </div>
+        {% endfor %}
+    </div>
+    <input type = "hidden" name = "classid" id="classid" value = "">
+    <!-------------------------------------------------------------------------------------------------->
+
+<!--Input buttons-->
+<!------------------------------------------------------------------------------------------------------>
+<div class="container p-5 my-5 bg-secondary text-white">
+    <div class="row">
+        <!--Submit Lesson Absentees Button-->
+        <div class="container col">
+            <label for="btnSubmitAbsentees" class="form-label">Submit lesson absentees.</label>
+            <br/>
+            <button type="submit" class="btn btn-primary" name="btnSubmitAbsentees", value="SubmitAbsentees">Submit Absentees</button>
+        </div>
+        <!------------------------------------------------------------------------------------------>
+        <!--Manage Absentees Button-->
+        <div class="container col">
+            <label for="btnManageAbsentees" class="form-label">View and manage absentees.</label>
+            <br/>
+            <button type="submit" class="btn btn-warning" value="ManageAbsentees", name="btnManageAbsentees">Manage Absentees</button>
+        </div>
+        <!------------------------------------------------------------------------------------------>
+        
+    </div>
+</div>
+
+</form>
+
+<!------------------------------------------------------------------------------------------------------>
+<!--js code-->
+<script>
+    function myFunction(id) {
+        var ele = document.getElementById(id);
+        if (ele.classList.contains('active')) 
+        {
+            ele.classList.remove('active');
+            
+        }
+        else
+        {
+            var selectableItems = document.querySelectorAll('.selector');
+            for (var i = 0; i < selectableItems.length; i++) 
+            {
+                
+                selectableItems[i].classList.remove('active');
+            }
+            
+            ele.classList.add('active');
+        }
+                 
+        document.getElementById("classid").value = id;
+    }
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+ 
+
+
+{% block content %}
+
+
+<form action="" method="post">
+    {% csrf_token %}
+    
+    <div class="container p-5 my-5 mt-0 border bg-primary text-white">
+        <h4>Teacher Login</h4>
+        <div class="mb-3 mt-3">
+        <label for="teacher_code" class="form-label">Teacher Code:</label>
+        <input type="text" class="form-control" 
+            placeholder="Enter your teacher code" name="teacher_code">
+        </div>
+        
+        <div class="form-check mb-3">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" name="remember"> Remember me
+        </label>
+        </div>
+        <button type="submit" class="btn btn-dark" name="btnLogin" value="Login">Submit</button>
+    </div>
+
+    <!--Create user-->
+<!------------------------------------------------------------------------------------------------------>
+    <div class="container p-5 my-5 mt-0 border bg-primary text-white">
+        <h4>Teacher Create</h4>
+        <div class="mb-3 mt-3">
+        <label for="register_code" class="form-label">Teacher Code:</label>
+        <input type="text" class="form-control" id="register_code" 
+            placeholder="Enter your teacher code" name="register_code">
+        </div>
+    
+        <button type="submit" class="btn btn-dark" name="btnRegister" value="Register">Submit</button>
+    </div>
+  </form>
+
+{% endblock %}

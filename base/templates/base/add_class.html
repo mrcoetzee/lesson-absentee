@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+
+    <h3>Add a class</h3>
+
+    <form method = "POST" action="">
+        {% csrf_token %}
+        <div class="container p-5 my-5 border  bg-dark text-white">
+            <h4>Your classes:</h4>
+            {% for class in classes %}
+                
+                <div class="list-group">
+                    <li class="list-group-item list-group-item-action selector" id="{{class.id}}"
+                    onclick="myFunction('{{class.id}}')">
+        
+                    <div class="row">
+                        <div class="col-md-2" >{{class.subject}} {{class.grade}}</div>
+                        <div class="col-md-4">{{class.description}}</div>
+                    </div>
+                    
+                    </li>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="container p-5 my-5 bg-primary text-white">
+            <h1>Add a new Class</h1>
+            <p>Select a subject, a grade and optionally, add a description for your new class.</p>
+
+            <!--Add Subject-->
+            <div class="row">
+                <div class="col">
+                    <label for="subject" class="form-label">Choose your subject from the list:</label>
+                    <select class="form-select" name="subject" id="subject">
+                    
+                        {% for subject in subjectList %}
+                            <option>{{subject}}</option>
+                        {% endfor %}
+                        
+                        
+                    </select>    
+                </div>
+                <!--Add a class-->
+                <div class="col">
+                    <label for="grade" class="form-label">Choose your grade from the list:</label>
+                    <select class="form-select" name="grade" id="grade">
+                    
+                        {% for grade in gradeList %}
+                            <option>{{grade}}</option>
+                        {% endfor %}
+                        
+                        
+                    </select>
+                </div>
+            </div> 
+            <div class="row p-2">
+                <label for="description" class="form-label mt-2">Add a description for your class (<i>key 7</i> or <i>9E</i>):</label>
+                <input type="text" class="form-control" name="description" id="description">
+            </div>
+            <button type="submit" class="btn btn-light mt-3">Submit</button>
+        </div>
+    </form>
+
+    <script>
+        function myFunction(id) {
+            var selectableItems = document.querySelectorAll('.selector');
+            for (var i = 0; i < selectableItems.length; i++) {
+                selectableItems[i].classList.remove('active');
+            }
+            var ele = document.getElementById(id);
+            ele.classList.add('active')
+
+            
+            
+        }
+    </script>
+
+
+{% endblock %}

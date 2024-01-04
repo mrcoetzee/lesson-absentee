@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+ 
+
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+   
+    <!--List of selected learners-->
+    <div class="container p-5 my-5 border  bg-dark text-white">
+        <label  class="form-label">Absentees:</label>
+         <ul class="list-group" id="dynamicList">
+   
+        {% for learner in absentees %}
+            
+            <!--<div class="list-group " id="absentLearners" >-->
+                <li class="list-group-item list-group-item-action selector" id="listLearner" data-learner-id="{{learner.id}}">
+                    {{learner.learner.name}} 
+                    <!--
+                <input type="hidden" id="ListLearnerid" name="listLearnerId" value="{{learner.learner.id}}">
+      
+                <div class="row" onclick="myFunc()">
+                    <div class="col-md-2" id="tester" value="test">{{learner.learner.name}}</div>
+                </div>
+                -->
+                </li>               
+            <!--</div>-->
+        {% endfor %}
+         </ul>
+        
+    </div>
+
+    <!--Learner Select-->
+    <div class="container p-5 my-5 bg-secondary text-white">
+        <label for="absentStudentsInput" class="form-label">Choose a learner from the list:</label>
+        <!--Enter learner name input-->
+        <input type="text" id="absentStudentsInput" name="absentStudentsInput" class="form-control" placeholder="Enter absent students' names">
+        <input type="hidden" id="absentStudentsInputId" name= "absentStudentsInputId">
+        
+        <button type="submit" class="btn btn-warning mt-3" value="addabsentee", name="btnAddAbsentee">Add Absentee</button>
+        
+    </div>
+
+
+</form>
+
+<script>
+/*    function myFunction(learner) {
+        var x = document.getElementById("selected_learner");
+        x.value = learner;
+        document.forms[0].submit();   
+    }
+*/
+// Autocomplete when user searches for learner
+$(document).ready(function () {
+      // Attach autocomplete functionality to the input field
+    $('#absentStudentsInput').autocomplete({
+        source: '/ajax/autocomplete/',  // URL to fetch autocomplete suggestions
+        minLength: 2,  // Minimum characters before making a request
+
+        select: function (event, ui) {
+            // Set the selected value in the input field
+            event.preventDefault();
+            $(this).val(ui.item.label);
+            
+            // Access the primary key from the 'value' property in the ui.item object
+            var selectedLearnerId = ui.item.value;
+            //var selectedLearner = ui.item.label;
+            // Set the value of the hidden input field with the learner ID
+            $('#absentStudentsInputId').val(selectedLearnerId);
+            //$('#absentStudentsInput').val(selectedLearner);
+        }
+
+    });
+});
+
+// Delete learner from list and LearnerClass table
+/*$(document).ready(function() {
+    var csrftoken = Cookies.get('csrftoken');
+    $('#listLearner').on('click', function() {
+        var itemId = $('#listLearnerId').val();
+        
+        // Send AJAX request to delete item
+        $.ajax({
+        url: '/ajax/delete_item/',  // Updated to match Django endpoint
+        method: 'POST',
+        data: { itemId: itemId },
+
+        // Include the CSRF token in the headers
+        headers: {'X-CSRFToken': csrftoken},
+
+        success: function(response) {
+            // Update the frontend (remove the item from the list)
+            $(this).remove();
+            alert('Item deleted successfully!');
+        },
+        error: function(error) {
+            console.error('Error deleting item:', error);
+        }
+        });
+    })
+});*/
+
+$(document).ready(function() {
+    var csrftoken = Cookies.get('csrftoken');
+    $('#dynamicList').on('click', 'li', function() {
+        // Extract learner name from the clicked list item
+        var learnerName = $(this).text();
+
+        // Extract learner ID from the data-learner-id attribute
+        var learnerId = $(this).data('learner-id');
+        var listItem = $(this);
+
+        // Send AJAX request to the backend for item deletion
+        $.ajax({
+            url: '/ajax/delete_item/',  // Update the URL to match your actual endpoint
+            method: 'POST',
+            data: { learnerName: learnerName, learnerId: learnerId },
+            headers: {'X-CSRFToken': csrftoken},
+            success: function(response) {
+                // Handle success if needed
+                console.log(response);
+                alert('Item deleted successfully!');
+                // Optionally, remove the list item from the frontend upon successful deletion
+                listItem.remove();
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+</script>
+
+
+
+{% endblock %}
